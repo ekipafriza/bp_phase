@@ -1,0 +1,30 @@
+// https://github.com/ekipafriza
+
+
+[ENABLE]
+
+aobscan(INJECT,45 88 A2 F7 00 00 00) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  //mov [r10+000000F7],r12l
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 2
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db 45 88 A2 F7 00 00 00
+
+unregistersymbol(INJECT)
+dealloc(newmem)
